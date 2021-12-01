@@ -7,8 +7,9 @@ using namespace std;
 class Ticket{
 	private:
       string nuevaCompra;
+      // string nomCliente;
+      // string telCliente;
       int estatusCompra;
-      string clientenovo;
 		ofstream myfile;
 		string getFecha(){
 			// Declaring argument for time()
@@ -27,29 +28,36 @@ class Ticket{
       string getNuevaVentaString(){
          return nuevaCompra;
       }
-      string getCliente(){
-         return clientenovo;
-      }
+      // string getNombreCliente(){
+      //    return nomCliente;
+      // }
+      // string getTelefonoCliente(){
+      //    return telCliente;
+      // }
       int getEstatusCompra(){
          return estatusCompra;
       }
       //setters
       void setNuevaVentaString(string novaCompra){
          nuevaCompra = novaCompra;
-      }
-      void setcliente(string novocliente){
-         clientenovo = novocliente;
-      }
+      };
       void setEstatusCompra(int estatus){
          estatusCompra = estatus;
-      }
+      };
+      // void setClienteNombre(string nombreCliente){
+      //    nomCliente = nombreCliente;
+      // };
+      // void setClienteTelefono(string telefonoCliente){
+      //    telCliente = telefonoCliente;
+      // };
 
 	public:
         //constructor
-		Ticket(string novaCompra, int estatus, string clientedatos){
+		Ticket(string novaCompra, int estatus){
 			setNuevaVentaString(novaCompra);
          setEstatusCompra(estatus);
-         setcliente(clientedatos);
+         // setClienteNombre(nombrecliente);
+         // setClienteTelefono(telefonocliente);
 		};
 
 		void guardar(){
@@ -61,8 +69,9 @@ class Ticket{
                myfile << getFecha()+"\n";
                myfile << getNuevaVentaString();
                myfile << "\n\nEntregar en 30 Dias";
-               myfile << "\n\n\n" + getCliente();
-
+               // myfile << "\n\nGracias";
+               // myfile << "\n\n  Compra a nombre de "+getNombreCliente();
+               // myfile << "\n  Telefono"+getTelefonoCliente();
             }else{
                myfile << "Tienda de Juegos.\n";
                myfile <<"Ticket de Venta\n Fecha: ";
@@ -508,61 +517,6 @@ void adminAPI(){
    return;
 }
 
-void puntoVenta(){
-   char opcPuntoVenta;
-   int xtemp;
-   string nombreTemp;
-   string telefonoTemp;
-   do{
-      cout << endl << endl << "+= += += Menu Punto de Venta += += +=" << endl;
-      cout << endl << "1 - Rentar" << endl;
-      cout << endl << "2 - Vender" << endl;
-      cout << endl << "0 - Regresar" << endl;
-
-      cin >> opcPuntoVenta;
-      switch (opcPuntoVenta){
-         case '1':
-            cout << endl << "Ingrese el ID del juego" << endl;
-            cin >> xtemp;
-
-            if(Lista.show(xtemp, 1).length() > 0){
-               // cliente nombre
-               cout << endl << "Ingrese el nombre del Cliente" <<endl;
-               cin >> nombreTemp;
-
-               // cliente telefono
-               cout << endl << "Ingrese el telefono del cliente" <<endl;
-               cin >> telefonoTemp;
-
-               Cliente obCliente(nombreTemp, telefonoTemp);
-               Ticket ob(Lista.show(xtemp, 1), 1, "Nombre: "+obCliente.getNombre()+"\nTelefono: "+obCliente.getTelefono());
-               ob.guardar();
-            }
-         break;
-
-         case '2':
-            cout << endl << "Ingrese el ID del juego" << endl;
-            cin >> xtemp;
-
-            if(Lista.show(xtemp, 1).length() > 0){
-               Ticket ob(Lista.show(xtemp, 2), 2, "");
-               ob.guardar();
-            }
-         break;
-
-         case '0':
-            cout << endl << "Sale" << endl;
-         break;
-         
-         default:
-            cout << endl << "Opcion erronea" <<endl;
-         break;
-      }
-   }while(opcPuntoVenta != '0');
-   cin.get();
-   return;
-}
-
 
 int main()
 {
@@ -574,11 +528,15 @@ int main()
    }
 
    char opcMenuPrincipal;
+   char opcPuntoVenta;
+   int xtemp;
+   string nombreTemp;
+   string telefonoTemp;
+
    do{
-      cout << endl << endl << "=- =- =- Menu Principal =- =- =-" << endl;
       cout << endl << "1 - admin" <<endl;
       cout << endl << "2 - Punto de Venta" <<endl;
-      cout << endl << "0 - Salir del Programa" <<endl;
+      cout << endl << "0 - Salir" <<endl;
       cin >> opcMenuPrincipal;
       switch(opcMenuPrincipal){
          case '1':
@@ -586,7 +544,57 @@ int main()
          break;
 
          case '2':
-            puntoVenta();
+            cout << endl << "1 - Rentar" << endl;
+            cout << endl << "2 - Vender" << endl;
+            cout << endl << "0 - Salir" << endl;
+            cin >> opcPuntoVenta;
+
+            do{
+               switch (opcPuntoVenta){
+                  case '1':
+                     cout << endl << "Ingrese el ID del juego" << endl;
+                     cin >> xtemp;
+
+                     // cliente nombre
+                     cout << endl << "Ingrese el nombre del Cliente" <<endl;
+                     cin >> nombreTemp;
+
+                     // cliente telefono
+                     cout << endl << "Ingrese el telefono del cliente" <<endl;
+                     cin >> telefonoTemp;
+
+                     //nueva instancia de cliente
+                     Cliente obCliente(nombreTemp, telefonoTemp);
+
+                     if(Lista.show(xtemp, 1).length() > 0){
+                        Ticket ob(Lista.show(xtemp, 1)+obCliente.getNombre()+obCliente.getTelefono(), 1);
+                        ob.guardar();
+                     }
+                     return main();
+                  break;
+
+                  case '2':
+                     cout << endl << "Ingrese el ID del juego" << endl;
+                     cin >> xtemp;
+                     if(Lista.show(xtemp, 2).length() > 0){
+                        Ticket ob(Lista.show(xtemp, 2), 2);
+                        ob.guardar();
+                     }
+                     return main();
+                  break;
+
+
+                  case '0':
+                     // cout << endl << "Sale" << endl;
+                     return main();
+                  break;
+                  
+                  default:
+                     cout << endl << "Opcion erronea" <<endl;
+                  break;
+               }
+            }while (opcPuntoVenta != '0');
+            cin.get();
          break;
 
          case '0':

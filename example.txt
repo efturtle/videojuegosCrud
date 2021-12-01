@@ -1,0 +1,13 @@
+Tienda de Juegos.
+Ticket de Renta
+Fecha: Wed Dec 01 13:27:37 2021
+
+Nombre qwe
+Precio Renta 123.000000
+
+
+Entregar en 30 Dias
+
+
+Nombre: ert
+Telefono: 123
