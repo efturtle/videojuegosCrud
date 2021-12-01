@@ -376,7 +376,6 @@ void lista::Ultimo()
 
 
 void adminAPI(){
-   
    char opc;
    int x,cant;
    string nombre;
@@ -521,6 +520,7 @@ void puntoVenta(){
 
       cin >> opcPuntoVenta;
       switch (opcPuntoVenta){
+///------Renta         
          case '1':
             cout << endl << "Ingrese el ID del juego" << endl;
             cin >> xtemp;
@@ -538,8 +538,10 @@ void puntoVenta(){
                Ticket ob(Lista.show(xtemp, 1), 1, "Nombre: "+obCliente.getNombre()+"\nTelefono: "+obCliente.getTelefono());
                ob.guardar();
             }
-         break;
 
+            cout <<endl << "-*/-*/-*/-*/Venta Realizada -*/-*/-*/-*/";
+         break;
+///------Venta
          case '2':
             cout << endl << "Ingrese el ID del juego" << endl;
             cin >> xtemp;
@@ -548,6 +550,7 @@ void puntoVenta(){
                Ticket ob(Lista.show(xtemp, 2), 2, "");
                ob.guardar();
             }
+            cout <<endl << "-*/-*/-*/-*/Venta Realizada -*/-*/-*/-*/";
          break;
 
          case '0':
@@ -582,10 +585,12 @@ int main()
       cin >> opcMenuPrincipal;
       switch(opcMenuPrincipal){
          case '1':
+            //lo que habia hecho la maestra
             adminAPI();
          break;
 
          case '2':
+            //lo nuevo
             puntoVenta();
          break;
 
