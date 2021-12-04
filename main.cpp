@@ -4,6 +4,13 @@
 using namespace std;
 #define ASCENDENTE 1
 
+// class BD{
+//    private:
+
+//    public:
+
+// };
+
 class Ticket{
 	private:
       string nuevaCompra;
@@ -21,7 +28,7 @@ class Ticket{
 			// Using localtime()
 			ti = localtime(&tt);
 			string temp = asctime(ti);
-         	return temp;  
+         return temp;
 		};
       //getters
       string getNuevaVentaString(){
