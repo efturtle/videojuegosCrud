@@ -7,7 +7,6 @@ using namespace std;
 int main () {
    string renglon;
    string temp;
-   string tempo;
    int iterador = 1;
    ifstream myfile ("C:/Users/grave/Documents/videoJuegosCrud/datos.txt");
    if (myfile.is_open()){

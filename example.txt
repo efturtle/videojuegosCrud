@@ -1,13 +1,10 @@
 Tienda de Juegos.
-Ticket de Renta
-Fecha: Wed Dec 01 13:53:20 2021
+Ticket de Venta
+ Fecha: Sat Dec 04 16:30:16 2021
 
-Nombre qwe
-Precio Renta 123.000000
-
-
-Entregar en 30 Dias
+Hitman3
+Precio Venta: 359.99
 
 
-Nombre: qwe
-Telefono: 123
+
+Gracias por su compra

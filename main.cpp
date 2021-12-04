@@ -1,19 +1,17 @@
 #include <iostream>
 #include <string.h>
 #include <fstream>
+#include <typeinfo>
+#include <stdlib.h>
+#include <stdio.h>
 using namespace std;
 #define ASCENDENTE 1
 
-// class BD{
-//    private:
 
-//    public:
-
-// };
 
 class Ticket{
 	private:
-      string nuevaCompra;
+      string detallesJuego;
       int estatusCompra;
       string clientenovo;
 		ofstream myfile;
@@ -31,8 +29,8 @@ class Ticket{
          return temp;
 		};
       //getters
-      string getNuevaVentaString(){
-         return nuevaCompra;
+      string getDetalles(){
+         return detallesJuego;
       }
       string getCliente(){
          return clientenovo;
@@ -41,8 +39,8 @@ class Ticket{
          return estatusCompra;
       }
       //setters
-      void setNuevaVentaString(string novaCompra){
-         nuevaCompra = novaCompra;
+      void setDetalles(string detalles){
+         detallesJuego = detalles;
       }
       void setcliente(string novocliente){
          clientenovo = novocliente;
@@ -53,10 +51,10 @@ class Ticket{
 
 	public:
         //constructor
-		Ticket(string novaCompra, int estatus, string clientedatos){
-			setNuevaVentaString(novaCompra);
+		Ticket(int estatus, string clientedatos, string detalles){
          setEstatusCompra(estatus);
          setcliente(clientedatos);
+         setDetalles(detalles);
 		};
 
 		void guardar(){
@@ -64,17 +62,17 @@ class Ticket{
             //renta
             if(getEstatusCompra() == 1){
                myfile << "Tienda de Juegos.\n";
-               myfile <<"Ticket de Renta\nFecha: ";
+               myfile <<"Ticket de Renta\n\nFecha: ";
                myfile << getFecha()+"\n";
-               myfile << getNuevaVentaString();
+               myfile << getDetalles();
                myfile << "\n\nEntregar en 30 Dias";
-               myfile << "\n\n\n" + getCliente();
+               myfile << "\n\n\n" + getCliente()+"\n\nGracias por su compra";
 
             }else{
                myfile << "Tienda de Juegos.\n";
                myfile <<"Ticket de Venta\n Fecha: ";
-               myfile << getFecha();
-               myfile << getNuevaVentaString();
+               myfile << getFecha() + "\n";
+               myfile << getDetalles() + "\n\n\nGracias por su compra";
             }
             myfile.close();
             return;
@@ -147,6 +145,7 @@ class lista {
       void BuscarId(int v);
       void BuscarNombre(string nombre);
       string show(int v, int estatusCompra);
+      void mostrarDatos();
    
       string getHora(){
          // Declaring argument for time()
@@ -177,6 +176,7 @@ lista::~lista(){
       delete aux;
    }
 }
+
 
 
 // Busqueda por ID //
@@ -340,6 +340,32 @@ void lista::BorrarPorId(int v){
    }
 }
 
+void lista::mostrarDatos(){
+   string renglon;
+   string temp;
+   int iterador = 1;
+   ifstream myfile ("C:/Users/grave/Documents/videoJuegosCrud/datos.txt");
+   if (myfile.is_open()){
+      while ( getline (myfile,renglon) ){
+         //convertir iterador en string
+         //comparar a line
+         if(!renglon.compare(to_string(iterador))){
+            //si es igual a iterador imprimir un msg especial
+            temp+="\n ";
+            iterador++;
+         }
+            
+         temp += "-> " + renglon;
+         cout << endl << temp;
+         temp = "";
+      }
+      myfile.close();
+   }
+
+   else cout << "Unable to open file"; 
+   return;
+}
+
 // Show //
 void lista::Mostrar(int orden)
 {   
@@ -402,6 +428,7 @@ void adminAPI(){
       cout<<"6.-Accesar al ultimo videojuego"<<endl;
       cout<<"7.-Buscar por ID"<<endl;
       cout<<"8.-Buscar por Nombre"<<endl;
+      cout<<"9.-Mostrar Archivo txt"<<endl;
       cout<<"0.-Regresar"<<endl;
       cout<<"Selecciona una opcion: ";
       cout<<endl;
@@ -499,6 +526,10 @@ void adminAPI(){
             }
          break;
 
+         case '9':
+            Lista.mostrarDatos();
+         break;
+
 //------- Exit
          case '0':
             cout<<"Sale"<<endl;
@@ -516,9 +547,13 @@ void adminAPI(){
 
 void puntoVenta(){
    char opcPuntoVenta;
-   int xtemp;
+   int xtemp, tempo, tempor, tempora, iterador;
    string nombreTemp;
    string telefonoTemp;
+   string renglon;
+   string temp;
+   string datosCliente;
+   ifstream myfile ("C:/Users/grave/Documents/videoJuegosCrud/datos.txt");
    do{
       cout << endl << endl << "+= += += Menu Punto de Venta += += +=" << endl;
       cout << endl << "1 - Rentar" << endl;
@@ -528,36 +563,107 @@ void puntoVenta(){
       cin >> opcPuntoVenta;
       switch (opcPuntoVenta){
 ///------Renta         
-         case '1':
+         case '1':{
+            iterador = 0;
             cout << endl << "Ingrese el ID del juego" << endl;
             cin >> xtemp;
+            tempo = xtemp + 1;
 
-            if(Lista.show(xtemp, 1).length() > 0){
-               // cliente nombre
-               cout << endl << "Ingrese el nombre del Cliente" <<endl;
-               cin >> nombreTemp;
+            cout << endl << "Ingrese el nombre del Cliente" <<endl;
+            cin >> nombreTemp;
 
-               // cliente telefono
-               cout << endl << "Ingrese el telefono del cliente" <<endl;
-               cin >> telefonoTemp;
+            // cliente telefono
+            cout << endl << "Ingrese el telefono del cliente" <<endl;
+            cin >> telefonoTemp;
+            Cliente obCliente(nombreTemp, telefonoTemp);
 
-               Cliente obCliente(nombreTemp, telefonoTemp);
-               Ticket ob(Lista.show(xtemp, 1), 1, "Nombre: "+obCliente.getNombre()+"\nTelefono: "+obCliente.getTelefono());
-               ob.guardar();
+            datosCliente = "Nombre: "+obCliente.getNombre()+"\nTelefono: "+obCliente.getTelefono();
+
+            myfile.open("C:/Users/grave/Documents/videoJuegosCrud/datos.txt");
+
+            if (myfile.is_open()){               
+               while (getline(myfile,renglon)){
+                  //comienza la lectura
+                  //usar la comparacion para conocer el siguiente nodo
+                  tempor = renglon.compare(to_string(tempo));
+
+                  tempora = renglon.compare(to_string(xtemp));
+
+                  if(tempora == 0){
+                     temp = "";
+                  }
+                  if(tempor == 0){
+                     //lo bueno
+                     Ticket ob(1, datosCliente, temp);
+                     ob.guardar();
+                     // cout << temp;
+                     temp = "";
+                     tempo = 0;
+                  }else{
+                     iterador++;
+                     if(tempora != 0){
+                        temp += renglon + "\n";
+                        if((iterador % 2) == 0){
+                           temp+="Precio Renta: ";
+                        }
+                     }
+                  }
+               }
+            }else{
+               cout << "unable to open file";
             }
-
-            cout <<endl << "-*/-*/-*/-*/Venta Realizada -*/-*/-*/-*/";
+            myfile.close();
+            cout << endl << "-*/-*/-*/-*/Venta Realizada -*/-*/-*/-*/";
+         }
          break;
 ///------Venta
          case '2':
+            iterador = 0;
             cout << endl << "Ingrese el ID del juego" << endl;
             cin >> xtemp;
+            tempo = xtemp + 1;
+            myfile.open("C:/Users/grave/Documents/videoJuegosCrud/datos.txt");
 
-            if(Lista.show(xtemp, 1).length() > 0){
-               Ticket ob(Lista.show(xtemp, 2), 2, "");
-               ob.guardar();
+            if (myfile.is_open()){               
+               while (getline(myfile,renglon)){
+                  tempor = renglon.compare(to_string(tempo));
+
+                  tempora = renglon.compare(to_string(xtemp));
+
+                  if(tempora == 0){
+                     temp = "";
+                  }
+                  if(tempor == 0){
+                     //lo bueno
+                     Ticket ob(2, datosCliente, temp);
+                     ob.guardar();
+                     // cout << temp;
+                     temp = "";
+                     tempo = 0;
+                  }else{
+                     iterador++;
+                     if(tempora != 0){
+                        temp += renglon + "\n";
+                        if((iterador % 2) != 0){
+                           temp+="Precio Venta: ";
+                        }
+                     }
+                  }
+               }
+            }else{
+               cout << "unable to open file";
             }
-            cout <<endl << "-*/-*/-*/-*/Venta Realizada -*/-*/-*/-*/";
+            myfile.close();
+            cout << endl << "-*/-*/-*/-*/Venta Realizada -*/-*/-*/-*/";
+
+            // cout << endl << "Ingrese el ID del juego" << endl;
+            // cin >> xtemp;
+
+            // if(Lista.show(xtemp, 1).length() > 0){
+            //    Ticket ob(Lista.show(xtemp, 2), 2, "");
+            //    ob.guardar();
+            // }
+            // cout <<endl << "-*/-*/-*/-*/Venta Realizada -*/-*/-*/-*/";
          break;
 
          case '0':
